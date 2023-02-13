@@ -12,9 +12,9 @@ class BagInfo:
         self.soupify(self.urls[country])
 
   def soupify(self, url):
-   # page = requests.get(url, headers={'User-Agent': 'Mozilla/5.0'},verify=False, proxies=proxy)
-    content = open('Output.txt', 'r').read()
-    soup = BS(content, 'html.parser')
+    page = requests.get(url, headers={'User-Agent': 'Mozilla/5.0'},verify=False, proxies=proxy)
+    # content = open('Output.txt', 'r').read()
+    soup = BS(page.text, 'html.parser')
     
     allBags = soup.find_all('div', {'product-grid-list-item'})
     length = len(allBags)
