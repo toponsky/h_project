@@ -5,7 +5,11 @@ import config
 from DBManagement import Database as Database
 
 def soupify(url, bags, db):
-    page = requests.get(url, headers={'User-Agent': 'Mozilla/5.0'},verify=False)
+    proxy = {
+        'http': "toponsky%40gmail.com:Mily2017@frankfurt3.hideservers.net",
+        'https': "toponsky%40gmail.com:Mily2017@frankfurt3.hideservers.net"
+    }
+    page = requests.get(url, headers={'User-Agent': 'Mozilla/5.0'},verify=False, proxies=proxy)
     soup = BS(page.text, 'lxml')
 
     # allbags = soup.find_all('h3', {'class':'product-item-name'})
