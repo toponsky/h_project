@@ -22,7 +22,9 @@ class Database:
       "name": p_name,
       "color": p_color,
       "p_price": p_price,
-      "create_time": datetime.now()
+      "create_time": datetime.now(),
+      'is_available': True,
+      'is_destroy': False
     }
     self.bag_info.insert_one(bagInfo)
 
@@ -31,4 +33,7 @@ class Database:
       return True 
     else:
       return False
+
+  def getBags(self):
+    return self.bag_info.find()
 

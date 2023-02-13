@@ -12,7 +12,7 @@ class BagInfo:
         self.soupify(self.urls[country])
 
   def soupify(self, url):
-    page = requests.get(url, headers={'User-Agent': 'Mozilla/5.0'},verify=False, proxies=proxy)
+    page = requests.get(url, headers={'User-Agent': 'Mozilla/5.0'}, verify=False)
     # content = open('Output.txt', 'r').read()
     soup = BS(page.text, 'html.parser')
     
