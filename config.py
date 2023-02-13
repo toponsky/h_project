@@ -8,7 +8,7 @@ bag_names=[
 ]
 
 
-db_connection = {
-  'username': 'yl_root',
-  'password': 'Cc00114110!'
-}
+db_connection = dict(
+    username = 'yl_root',
+    password = 'Cc00114110',
+)

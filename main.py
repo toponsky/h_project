@@ -19,7 +19,7 @@ def soupify(url, bags, db):
 
 if __name__ == "__main__":
              
-    db = Database.Database(config.db_connection.username, config.db_connection.password)
+    db = Database.Database(config.db_connection["username"], config.db_connection["password"])
     for country in config.urls:
         soupify(config.urls[country], config.bag_names, db)
       
