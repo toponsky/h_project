@@ -24,7 +24,9 @@ class Database:
       "p_price": p_price,
       "create_time": datetime.now(),
       'is_available': True,
-      'is_destroy': False
+      'is_destroy': False,
+      'color_section': 0,
+      'is_blocked': False
     }
     self.bag_info.insert_one(bagInfo)
 
@@ -36,4 +38,18 @@ class Database:
 
   def getBags(self):
     return self.bag_info.find()
+
+  def updateBagStatus(self, _id, isAvailable = True, isDestroy = False, colorSection = 0, isBlocked = False):
+    if isBlocked:
+      data = {
+        'is_blocked': True
+      }
+    else: 
+      data = {
+        'is_available': isAvailable,
+        'is_destroy': isDestroy,
+        'color_section': colorSection,
+        'is_blocked': False
+      }
+    self.bag_info.update_one({'_id':_id}, {"$set": data}, upsert=False)
 
