@@ -1,17 +1,24 @@
 import threading
 import subprocess
+import signal
+import os
 
 class ProxyManager(threading.Thread):
-    def __init__(self):
+    def __init__(self, proxy):
         self.stdout = subprocess.PIPE
         self.stdin = subprocess.PIPE
-        self.stderr = subprocess.stdout
+        self.proxy = proxy
         threading.Thread.__init__(self)
-
+        self._stop = threading.Event()
+    
     def run(self):
-        p = subprocess.Popen('sudo openvpn --config /home/pi/Downloads/ch.hideservers.net.ovpn'.split(),
-                             shell=False,
+        print('Proxy Name: {0}'.format(self.proxy))
+        command = 'sudo openvpn --config /home/pi/Downloads/{0}.hideservers.net.ovpn'.format(self.proxy).split()
+        self.p = subprocess.Popen(command,
+                             shell=True,
                              stdout=subprocess.PIPE,
                              stderr=subprocess.PIPE)
-
-        self.stdout, self.stderr = p.communicate()
+	
+    def stop(self):
+        # os.killpg(os.getpgid(self.p.pid), signal.SIGTERM)
+        self.p.kill()

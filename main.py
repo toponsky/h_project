@@ -2,7 +2,7 @@ import config
 from DBManagement import Database as Database
 from BagManagement import BagInfo, BagStatus
 from ProxyManagement import ProxyManager
-
+import time
 
 if __name__ == "__main__":
 
@@ -15,8 +15,19 @@ if __name__ == "__main__":
     # bag_status.checkAvailable()
 
 
-    myclass = ProxyManager.ProxyManager()
+    myclass = ProxyManager.ProxyManager('ch')
     myclass.start()
-    myclass.join()
-    print myclass.stdout
-      
+   
+    print (myclass.stdout)
+    time.sleep(3)
+    myclass.stop()
+    print (myclass.stdout)
+    
+    myclass = ProxyManager.ProxyManager('fr')
+    myclass.start()
+   
+    print (myclass.stdout)
+    time.sleep(3)
+    myclass.stop()
+    print (myclass.stdout)
+
