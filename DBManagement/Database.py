@@ -3,16 +3,19 @@ from datetime import datetime
 
 class Database:
 
-  def __init__(self, db_username, db_password, db_name):
-    MONGO_HOST = "192.168.178.20" 
-    MONGO_PORT = "27017"
-    MONGO_DB = db_name
-    MONGO_USER = db_username
-    MONGO_PASS = db_password
+  def __init__(self, db_config):
+    MONGO_HOST = db_config['db_host'] 
+    MONGO_PORT = db_config['db_port']
+    MONGO_DB = db_config['db_name']
+    MONGO_USER = db_config['username']
+    MONGO_PASS = db_config['password']
+
+    print("Start connect database: {0}:{1}/{2}".format(MONGO_HOST, MONGO_HOST, MONGO_DB))
     uri = "mongodb://{}:{}@{}:{}/{}?authSource=admin".format(MONGO_USER, MONGO_PASS, MONGO_HOST, MONGO_PORT, MONGO_DB)
     client = MongoClient(uri)
     self.database = client[MONGO_DB]
     self.bag_info = self.database.bag_info
+    print("Database connected successfully")
     
   def insertOneBag(self, p_id, p_url, p_img_url, p_name, p_color, p_price):
     bagInfo = { 

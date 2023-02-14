@@ -12,7 +12,7 @@ class ProxyThread(threading.Thread):
         self._stop = threading.Event()
     
     def run(self):
-        print('Stop Proxy: {0}'.format(self.proxy))
+        print('Start Proxy: {0}'.format(self.proxy))
         command = 'sudo openvpn --config /home/pi/Downloads/{0}.hideservers.net.ovpn'.format(self.proxy).split()
         self.p = subprocess.Popen(command,
                              shell=True,
@@ -20,7 +20,6 @@ class ProxyThread(threading.Thread):
                              stderr=subprocess.PIPE)
 	
     def stop(self):
-        import pdb; pdb.set_trace()
-        print('Start Proxy: {0}'.format(self.proxy))
+        print('Stop Proxy: {0}'.format(self.proxy))
         if self.p is not None:
             self.p.kill()
