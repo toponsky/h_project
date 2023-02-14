@@ -1,9 +1,8 @@
 import threading
 import subprocess
 import signal
-import os
 
-class ProxyManager(threading.Thread):
+class ProxyThread(threading.Thread):
     def __init__(self, proxy):
         self.stdout = subprocess.PIPE
         self.stdin = subprocess.PIPE
@@ -20,5 +19,4 @@ class ProxyManager(threading.Thread):
                              stderr=subprocess.PIPE)
 	
     def stop(self):
-        # os.killpg(os.getpgid(self.p.pid), signal.SIGTERM)
         self.p.kill()

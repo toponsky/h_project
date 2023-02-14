@@ -15,19 +15,13 @@ if __name__ == "__main__":
     # bag_status.checkAvailable()
 
 
-    myclass = ProxyManager.ProxyManager('ch')
-    myclass.start()
-   
-    print (myclass.stdout)
-    time.sleep(3)
-    myclass.stop()
-    print (myclass.stdout)
+    proxyMger = ProxyManager.ProxyManager(proxy_list)
     
-    myclass = ProxyManager.ProxyManager('fr')
-    myclass.start()
    
-    print (myclass.stdout)
+    proxyMger.startNextProxy()
     time.sleep(3)
-    myclass.stop()
-    print (myclass.stdout)
-
+    proxyMger.startNextProxy()
+    time.sleep(3)
+    proxyMger.startNextProxy()
+    time.sleep(3)
+    proxyMger.stop()

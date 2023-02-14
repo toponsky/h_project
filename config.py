@@ -13,3 +13,5 @@ db_connection = dict(
     password = 'Cc00114110!',
     db_name = 'hermes_db'
 )
+
+proxy_list = ['berlin', 'ch', 'fr', 'frankfurt2', 'ie']
