@@ -1,4 +1,4 @@
-import ProxyThread
+from ProxyManagement import ProxyThread
 class ProxyManager:
 
     def __init__(self, proxies):
@@ -13,13 +13,13 @@ class ProxyManager:
         self.index = 0
       return temp
 
-    def startNextProxy():
-      if self.proxy not None:
+    def startNextProxy(self):
+      if self.proxy is not None:
         self.proxy.stop()
 
-      self.proxy = ProxyThread.ProxyThread(self.proxyList(self._getIndex()))
+      self.proxy = ProxyThread.ProxyThread(self.proxyList[self._getIndex()])
+      self.proxy.start()
 
-    def stop():
-      if self.proxy not None:
-        self.proxy.stop()  
+    def stop(self):
+      self.proxy.stop()  
       

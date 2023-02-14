@@ -15,7 +15,7 @@ if __name__ == "__main__":
     # bag_status.checkAvailable()
 
 
-    proxyMger = ProxyManager.ProxyManager(proxy_list)
+    proxyMger = ProxyManager.ProxyManager(config.proxy_list)
     
    
     proxyMger.startNextProxy()
