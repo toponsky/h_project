@@ -13,15 +13,15 @@ class BagStatus:
     bags = self.db.getBags()
 
     for bag in self.db.getBags():
-      self.updateBag(bag)
+      if self.updateBag(bag):
+        break
       
 
   def updateBag(self, bag):
     url = self.BASE_URL + bag.get('url')
     _id = bag.get('_id')
     session = HTMLSession()
-    import pdb; pdb.set_trace()
-
+    isBlocked = False
     try:
       
       response = session.get(url, headers={'User-Agent': 'Mozilla/5.0'}, verify=False)
@@ -43,6 +43,9 @@ class BagStatus:
       else:
         print('bag website is blocked')
         self.db.updateBagStatus(_id, isBlocked = True)
-      
+        isBlocked = True
+    
     except requests.exceptions.RequestException as e:
       print(e)
+
+    return isBlocked
