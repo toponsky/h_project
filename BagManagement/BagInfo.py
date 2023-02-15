@@ -3,9 +3,10 @@ from bs4 import BeautifulSoup as BS
 import config
 
 class BagInfo:
-  def __init__(self, db, urls):
+  def __init__(self, db, urls, email_agent):
     self.db = db
     self.urls = urls
+    self.email = email_agent
 
   def collectBagsInfo(self):
     for country in self.urls:
@@ -34,4 +35,6 @@ class BagInfo:
           p_price = text[2].replace('\xa0 ','').replace(' €\n', '')
           self.db.insertOneBag(p_id,p_url,p_img_url,p_name,p_color,p_price)
           print('{0}.{1}'.format(i, b.text))
+          self.email.sendRawData(p_url, p_img_url,  p_name, 'Less one')
+          
         i +=1  

@@ -26,6 +26,7 @@ email_config = {
   'username': 'toponsky@irishdata.ie',
   'password': 'c00114110!',
   'to': [
-    "yimingliu0216@gmail.com"
+    "yimingliu0216@gmail.com",
+    "ma.bin9527000@gmail.com"
   ]
 }

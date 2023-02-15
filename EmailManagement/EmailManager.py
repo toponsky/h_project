@@ -45,15 +45,30 @@ class EmailManager:
       return render_template('email.html',
                 url = config.BASE_URL + bag.get('url'),
                 img_url = 'https:' + bag.get('img_url'),
-                name = bag.get('name')
+                name = bag.get('name'),
+                color_section = bag.get('color_section')
               )
       
-
-  def sendEmail(self, bag):
+  def _prepare_raw_data_content(self, url, imgUrl, name, colorSection):
+    with app.app_context(), app.test_request_context():
+      return render_template('email.html',
+                url = url,
+                img_url = 'https:' + imgUrl,
+                name = name,
+                color_section = colorSection
+              )
+  def sendBag(self, bag):
     for to in self.config['to']:
       print("Email: send bag: '{0}' to {1}".format(bag.get('name'), to))
-      msg = self._prepare_message(to, "Hermes Available Bag", {'html': self._prepare_content(bag)})
+      msg = self._prepare_message(to, "Hermes : {0} is available now".format(bag.get('name')), {'html': self._prepare_content(bag)})
       self.smtp.send_message(msg) 
       print("Email sent successfully") 
+
+  def sendRawData(self, url, imgUrl, name, colorSection):
+    for to in self.config['to']:
+      print("Email: send bag: '{0}' to {1}".format(name, to))
+      msg = self._prepare_message(to, "Hermes : {0} is available now".format(name), {'html': self._prepare_raw_data_content(url, imgUrl, name, colorSection)})
+      self.smtp.send_message(msg) 
+      print("Email sent successfully")     
 
   

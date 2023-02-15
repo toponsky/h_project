@@ -33,6 +33,9 @@ class Database:
     }
     self.bag_info.insert_one(bagInfo)
 
+  def findOneBag(self, p_id):
+    return self.bag_info.find_one({'id': p_id})  
+
   def isBagExists(self, p_id):
     if self.bag_info.count_documents({'id': p_id}) > 0:
       return True 

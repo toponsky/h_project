@@ -16,14 +16,14 @@ class BagStatus:
     self.email = email_agent
 
   def checkAvailable(self):    
-    for bag in self.db.getBags():
-      self.proxyMger.startNextProxy()
-      time.sleep(random.randint(10,15))  
-      if self.updateBag(bag):  
-        break;
-      time.sleep(random.randint(10,20))  
+    #for bag in self.db.getBags():
+     # self.proxyMger.startNextProxy()
+     # time.sleep(random.randint(10,15))  
+      #if self.updateBag(bag):  
+     #   break;
+    #  time.sleep(random.randint(10,20))  
 
-    # self.updateBag(self.db.getBags()[0])  
+    self.updateBag(self.db.getBags()[0])  
     
             
 
@@ -36,8 +36,8 @@ class BagStatus:
       response = session.get(url, headers={'User-Agent': 'Mozilla/5.0'}, verify=False)
       colorSections = len(response.html.find('h-product-variants'))
       blockerDiv = len(response.html.find('#cmsg'))
-      print ('Url: {0}'.format(url))
-      
+      print('Url: {0}'.format(url))
+      print(response.content)
       if blockerDiv > 0:
         print('bag website is blocked')
         self.db.updateBagStatus(_id, isBlocked = True)
@@ -49,8 +49,8 @@ class BagStatus:
 
       elif colorSections > 0:
         print('bag enable')
-        self.db.updateBagStatus(_id, color_section = colorSections)
-        self.email.sendEmail(bag)
+        self.db.updateBagStatus(_id, colorSection = colorSections)
+        self.email.sendBag(bag)
       
       elif hasattr(response.html.find('h1', first=True), 'text') and response.html.find('h1', first=True).text == 'Verflixtes Internet!':
         print('bag website destroyed')
