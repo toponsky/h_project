@@ -15,7 +15,6 @@ class Database:
     client = MongoClient(uri)
     self.database = client[MONGO_DB]
     self.bag_info = self.database.bag_info
-    self.bag_request = self.database.bag_request
     self.bag_request_log = self.database.bag_request_log
     print("Database connected successfully")
     
@@ -31,7 +30,8 @@ class Database:
       'is_available': True,
       'is_destroy': False,
       'color_section': 0,
-      'is_blocked': False
+      'is_blocked': False,
+      'is_checking': False
     }
     self.bag_info.insert_one(bagInfo)
 
@@ -62,7 +62,6 @@ class Database:
     self.bag_info.update_one({'id': id}, {"$set": data}, upsert=False)
 
   def refreshRequestBags(self):
-    self.bag_request.drop()
     bags = []
     dict_list = []
     for bag_name in self.database.key_words.find({}, { "_id": 0, "name": 1 }):
@@ -77,7 +76,10 @@ class Database:
         bags.append(bag)   
     [dict_list.append(item) for item in bags if item not in dict_list]
     for bag in dict_list:
-      self.bag_request.insert_one(bag)
+      data = {
+        "is_checking": True
+      }
+      self.bag_info.update_one({'id': bag.get('id')}, {"$set": data}, upsert=False)
     
     return dict_list    
 
@@ -86,7 +88,12 @@ class Database:
     self.bag_request_log.insert_one(logData)  
 
   def getBagRequestList(self): 
-    return self.bag_request.find({"is_destroy": {"$nin": ["null", "false"]}})
+    return self.bag_info.find({
+        "$and": [
+          {"is_destroy": {"$nin": ["null", "false"]}},
+          {'is_checking': True}
+        ]
+      })
 
   def close(self):
     self.client.close()
