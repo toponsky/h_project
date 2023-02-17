@@ -16,6 +16,7 @@ class Database:
     self.database = client[MONGO_DB]
     self.bag_info = self.database.bag_info
     self.bag_request = self.database.bag_request
+    self.bag_request_log = self.database.bag_request_log
     print("Database connected successfully")
     
   def insertOneBag(self, p_id, p_url, p_img_url, p_name, p_color, p_price):
@@ -44,9 +45,9 @@ class Database:
       return False
 
   def getBags(self):
-    return self.bag_info.find()
+    return self.bag_info.find({"is_destroy": {"$nin": ["null", "false"]}})
 
-  def updateBagStatus(self, _id, isAvailable = True, isDestroy = False, colorSection = 0, isBlocked = False):
+  def updateBagStatus(self, id, isAvailable = True, isDestroy = False, colorSection = 0, isBlocked = False):
     if isBlocked:
       data = {
         'is_blocked': True
@@ -58,7 +59,7 @@ class Database:
         'color_section': colorSection,
         'is_blocked': False
       }
-    self.bag_info.update_one({'_id':_id}, {"$set": data}, upsert=False)
+    self.bag_info.update_one({'id': id}, {"$set": data}, upsert=False)
 
   def refreshRequestBags(self):
     self.bag_request.drop()
@@ -80,8 +81,12 @@ class Database:
     
     return dict_list    
 
+  def insertResponseLog(self, logData):
+    logData['create_at'] = datetime.now()
+    self.bag_request_log.insert_one(logData)  
+
   def getBagRequestList(self): 
-    return self.bag_request.find()
+    return self.bag_request.find({"is_destroy": {"$nin": ["null", "false"]}})
 
   def close(self):
     self.client.close()

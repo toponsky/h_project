@@ -11,12 +11,12 @@ app = Flask(__name__)
 class EmailManager:
   def __init__(self, smtp_config):
     self.config = smtp_config
-    smtp_class = smtplib.SMTP_SSL
+    
+  def _connect(self):
     args = [self.config['sever']]
     args.append(int(self.config['port']))
-    self.smtp = smtp_class(*args)
+    self.smtp = smtplib.SMTP_SSL(*args)
     self.smtp.login(self.config['username'], self.config['password'])
-    
 
 
   def _prepare_message(self, send_to, subject, contents):
@@ -58,17 +58,20 @@ class EmailManager:
                 color_section = colorSection
               )
   def sendBag(self, bag):
+    self._connect()
     for to in self.config['to']:
       print("Email: send bag: '{0}' to {1}".format(bag.get('name'), to))
       msg = self._prepare_message(to, "Hermes : {0} is available now".format(bag.get('name')), {'html': self._prepare_content(bag)})
       self.smtp.send_message(msg) 
       print("Email sent successfully") 
+    self.smtp.quit()  
 
   def sendRawData(self, url, imgUrl, name, colorSection):
+    self._connect()
     for to in self.config['to']:
       print("Email: send bag: '{0}' to {1}".format(name, to))
       msg = self._prepare_message(to, "Hermes : {0} is available now".format(name), {'html': self._prepare_raw_data_content(url, imgUrl, name, colorSection)})
       self.smtp.send_message(msg) 
       print("Email sent successfully")     
-
+    self.smtp.quit()
   
