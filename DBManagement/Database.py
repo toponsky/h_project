@@ -10,11 +10,12 @@ class Database:
     MONGO_USER = db_config['username']
     MONGO_PASS = db_config['password']
 
-    print("Start connect database: {0}:{1}/{2}".format(MONGO_HOST, MONGO_HOST, MONGO_DB))
+    print("Start connect database: {0}:{1}/{2}".format(MONGO_HOST, MONGO_PORT, MONGO_DB))
     uri = "mongodb://{}:{}@{}:{}/{}?authSource=admin".format(MONGO_USER, MONGO_PASS, MONGO_HOST, MONGO_PORT, MONGO_DB)
     client = MongoClient(uri)
     self.database = client[MONGO_DB]
     self.bag_info = self.database.bag_info
+    self.bag_request = self.database.bag_request
     print("Database connected successfully")
     
   def insertOneBag(self, p_id, p_url, p_img_url, p_name, p_color, p_price):
@@ -59,3 +60,28 @@ class Database:
       }
     self.bag_info.update_one({'_id':_id}, {"$set": data}, upsert=False)
 
+  def refreshRequestBags(self):
+    self.bag_request.drop()
+    bags = []
+    dict_list = []
+    for bag_name in self.database.key_words.find({}, { "_id": 0, "name": 1 }):
+      search_text = ".*{0}.*".format(bag_name.get('name')).replace(' ', '.*')
+      for bag in self.database.bag_info.find(
+        {
+          'name': { 
+            '$regex': search_text, 
+            '$options' : 'i'
+          }
+        }):
+        bags.append(bag)   
+    [dict_list.append(item) for item in bags if item not in dict_list]
+    for bag in dict_list:
+      self.bag_request.insert_one(bag)
+    
+    return dict_list    
+
+  def getBagRequestList(self): 
+    return self.bag_request.find()
+
+  def close(self):
+    self.client.close()

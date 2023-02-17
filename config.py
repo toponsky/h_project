@@ -11,7 +11,7 @@ bag_names=[
 
 
 db_connection = {
-    'db_host': '84.203.117.228',
+    'db_host': '192.168.178.20',
     'db_port': '27017',
     'db_name': 'hermes_db',
     'username': 'yl_root',
@@ -21,12 +21,11 @@ db_connection = {
 proxy_list = ['berlin', 'ch', 'fr', 'frankfurt2', 'ie', 'se', 'barcelona', 'madrid']
 
 email_config = {
-  'sever': 'www.irishdata.ie',
+  'sever': '192.168.178.20',
   'port': '465',
   'username': 'toponsky@irishdata.ie',
   'password': 'c00114110!',
   'to': [
-    "yimingliu0216@gmail.com",
-    "ma.bin9527000@gmail.com"
+    "yimingliu0216@gmail.com"
   ]
 }
