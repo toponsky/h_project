@@ -1,0 +1,13 @@
+{
+  "default": {
+    "port": 8383,
+    "api_version": "/v1/",
+    "db_connection": {
+      "db_host": "192.168.178.20",
+      "db_port": "27017",
+      "db_name": "hermes_db",
+      "username": "yl_root",
+      "password": "Cc00114110!"
+    }
+  }
+}
