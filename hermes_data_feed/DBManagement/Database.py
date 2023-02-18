@@ -16,6 +16,7 @@ class Database:
     self.database = client[MONGO_DB]
     self.bag_info = self.database.bag_info
     self.bag_request_log = self.database.bag_request_log
+    self.bag_collect_log = self.database.bag_collect_log
     print("Database connected successfully")
     
   def insertOneBag(self, p_id, p_url, p_img_url, p_name, p_color, p_price):
@@ -87,13 +88,22 @@ class Database:
     logData['create_at'] = datetime.now()
     self.bag_request_log.insert_one(logData)  
 
-  def getBagRequestList(self): 
-    return self.bag_info.find({
+  def insertCollectLog(self, logData):
+    logData['create_at'] = datetime.now()
+    self.bag_collect_log.insert_one(logData)    
+
+  def getBagRequestList(self):
+    condition = {
         "$and": [
           {"is_destroy": {"$nin": ["null", "false"]}},
           {'is_checking': True}
         ]
-      })
+      } 
+    bags = self.bag_info.find(condition)
+
+    amount = self.bag_info.count_documents(condition)
+
+    return amount, bags
 
   def close(self):
     self.client.close()

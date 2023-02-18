@@ -1,3 +1,7 @@
+import requests
+
+requests.packages.urllib3.disable_warnings()
+
 BASE_URL='https://www.hermes.com'
 
 urls = {

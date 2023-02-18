@@ -1,11 +1,8 @@
 import requests
 from bs4 import BeautifulSoup as BS
-from requests_html import HTMLSession
 import config
 import time
 import json
-import random
-from pathlib import Path
 
 from ProxyManagement import ProxyManager
 from EmailManagement import EmailManager
@@ -18,17 +15,21 @@ class BagStatus:
     requests.packages.urllib3.disable_warnings()
 
   def checkAvailable(self):
+    requestLog = {}
     start_time = time.time()
     failList = []
+    amount, bags = self.db.getBagRequestList()
     self.db.insertResponseLog({
       "comment": "Start Check Bags"
     })
-
-    for bag in self.db.getBagRequestList():
+    for bag in bags:
       if not self.updateBag(bag):
         failList.append(bag)
-    # Try second fail check   
+    length = length + 1
     
+    
+
+    # Try second fail check   
     for bag in failList:
       self.updateBag(bag)
 
@@ -39,6 +40,8 @@ class BagStatus:
 
     
     self.db.insertResponseLog({
+      'check_no': amount,
+      "fail_no": len(failList),
       "comment": "Finish Check Bags, With : '{0}' and took {1}s".format(msg, int(time.time() - start_time))
     })
 
@@ -51,8 +54,6 @@ class BagStatus:
     proxies = {"http": proxy, "https": proxy}
     b_id = bag.get('id')
     isSuccess = False
-    
-    print("<<<<<<<----START BAG: '{0}' --->>>>>>>".format(bag.get('name')))
     print("URL: {0}".format(url))
     requestLog['url'] = url
     try:    
@@ -83,7 +84,6 @@ class BagStatus:
           print('BAG ENABLE ....')
           self.db.updateBagStatus(b_id, colorSection = colorSections)
           self.email.sendBag(bag)
-
       else:
         requestLog['err_code'] = response.status_code 
         print('Fail code: {0}'.format(response.status_code))  
