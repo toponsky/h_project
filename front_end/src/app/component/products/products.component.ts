@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from 'src/app/service/api.service';
-import { CartService } from 'src/app/service/cart.service';
+import { __read } from 'tslib';
 
 @Component({
   selector: 'app-products',
@@ -10,38 +10,64 @@ import { CartService } from 'src/app/service/cart.service';
 export class ProductsComponent implements OnInit {
 
   public productList : any ;
-  public filterCategory : any
+  public filterList : any;
+  public filterCondition: any;
+  public filterValue: any;
+  public amount : any;
   searchKey:string ="";
-  constructor(private api : ApiService, private cartService : CartService) { }
+  constructor(private api : ApiService) { }
 
   ngOnInit(): void {
     this.api.getProduct()
     .subscribe(res=>{
       this.productList = res;
-      this.filterCategory = res;
-      this.productList.forEach((a:any) => {
-        if(a.category ==="women's clothing" || a.category ==="men's clothing"){
-          a.category ="fashion"
-        }
-        Object.assign(a,{quantity:1,total:a.price});
-      });
-      console.log(this.productList)
+      this.filterList = res;
+      this.amount = res.length;
+      this.filterCondition = 'all'
     });
+  }
+  
+  checkingBag(item: any){
+    this.api.checkProduct(item, true)
+    .subscribe(res=>{
+      item.is_checking = true
+      this._freshList()
+    });
+  }
 
-    this.cartService.search.subscribe((val:any)=>{
-      this.searchKey = val;
-    })
+  uncheckingBag(item: any){
+    this.api.checkProduct(item, false)
+    .subscribe(res=>{
+      item.is_checking = false
+      this._freshList()
+    });
   }
-  addtocart(item: any){
-    this.cartService.addtoCart(item);
+
+  filter(filterCondition: string){
+    this.filterCondition =filterCondition
+    console.log(filterCondition)
+    let prop = '', value = true;
+    if(this.filterCondition == "checked") {
+      this.filterValue = true;
+    } else if (this.filterCondition == 'non-checked') {
+      this.filterValue = false;
+    } 
+   this._freshList()
   }
-  filter(category:string){
-    this.filterCategory = this.productList
+
+  _freshList() {
+    this.filterList = this.productList
     .filter((a:any)=>{
-      if(a.category == category || category==''){
+      if(a['is_checking'] == this.filterValue || this.filterCondition == 'all'){
         return a;
       }
     })
+    this.amount = this.filterList.length
   }
+
+  getCheckedBackground(bag: any) {
+    return bag.is_checking? "green": '';
+  }
+    
 
 }

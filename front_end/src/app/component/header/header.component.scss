@@ -5,9 +5,15 @@
 }
 
 .search-icon {
-    position: absolute;
     z-index: 10;
-    right: 59%;
-    top: 20px;
+    margin: auto;
     color: blue;
+}
+
+.search-icon:before {
+    margin-left: 10px;
+}
+
+.navbar-brand {
+    margin: auto;
 }

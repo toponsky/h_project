@@ -28,14 +28,25 @@
     margin: 50px;
 }
 
+.card a {
+    margin: auto;
+    margin-bottom: 15px;
+}
 .card img {
     width: 200px;
     height: 200px;
-    margin-bottom: 15px;
     transition: 0.3s ease-in-out;
 }
 
 .card img:hover {
     transition: 0.3s ease-in-out;
     transform: scale(1.1);
+}
+
+.card button {
+    width: 100%;
+}
+
+.is_checking {
+    background: green;
 }
