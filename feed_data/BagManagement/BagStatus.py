@@ -6,6 +6,7 @@ import json
 
 from ProxyManagement import ProxyManager
 from EmailManagement import EmailManager
+from SMSManangement import SMSManager
 
 class BagStatus:
   
@@ -19,16 +20,18 @@ class BagStatus:
     start_time = time.time()
     failList = []
     amount, bags = self.db.getBagRequestList()
+    
     self.db.insertResponseLog({
       "comment": "Start Check Bags"
     })
     for bag in bags:
       if not self.updateBag(bag):
         failList.append(bag)
-    length = length + 1
     
-    
-
+    self.db.insertResponseLog({
+      "fail_no": len(failList),
+      "comment": "Try second time, With '{0}'s fails".format(len(failList))
+    })
     # Try second fail check   
     for bag in failList:
       self.updateBag(bag)
@@ -83,7 +86,8 @@ class BagStatus:
           requestLog['bag_status'] = 'BAG ENABLE'
           print('BAG ENABLE ....')
           self.db.updateBagStatus(b_id, colorSection = colorSections)
-          self.email.sendBag(bag)
+          self.db.insertEmailLog(self.email.sendBag(self.db.getEmailAddresses(), bag)) 
+          self.db.insertSMSLog(SMSManager.sendBagSMS(self.db.getSMSNumbers(), bag.get('name'))) 
       else:
         requestLog['err_code'] = response.status_code 
         print('Fail code: {0}'.format(response.status_code))  
@@ -103,9 +107,9 @@ class BagStatus:
           isSuccess = True
           requestLog['err_msg'] = 'No credit in account, please topup'
           print('No credit in account, please topup')
-        
-        
-    
+      
+      
+  
     except requests.exceptions.RequestException as e:
       print(e)
 
@@ -115,4 +119,4 @@ class BagStatus:
     self.db.insertResponseLog(requestLog)
     return isSuccess
 
-      
+    

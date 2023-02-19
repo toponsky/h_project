@@ -12,11 +12,14 @@ class Database:
 
     print("Start connect database: {0}:{1}/{2}".format(MONGO_HOST, MONGO_PORT, MONGO_DB))
     uri = "mongodb://{}:{}@{}:{}/{}?authSource=admin".format(MONGO_USER, MONGO_PASS, MONGO_HOST, MONGO_PORT, MONGO_DB)
-    client = MongoClient(uri)
+    client = MongoClient(uri, serverSelectionTimeoutMS= 10000000)
     self.database = client[MONGO_DB]
     self.bag_info = self.database.bag_info
     self.bag_request_log = self.database.bag_request_log
     self.bag_collect_log = self.database.bag_collect_log
+    self.sms_log = self.database.sms_log
+    self.email_log = self.database.email_log
+    self.user = self.database.user
     print("Database connected successfully")
     
   def insertOneBag(self, p_id, p_url, p_img_url, p_name, p_color, p_price):
@@ -107,3 +110,31 @@ class Database:
 
   def close(self):
     self.client.close()
+
+
+  def insertSMSLog(self, logData):
+    logData['create_at'] = datetime.now()
+    self.sms_log.insert_one(logData)
+
+  def insertEmailLog(self, logData):
+    logData['create_at'] = datetime.now()
+    self.email_log.insert_one(logData)  
+
+  def getUsers(self):
+    return self.user.find({})  
+
+  def getEmailAddresses(self):
+    receivers = []    
+    for user in self.getUsers():
+        if user.get('email_alert') and user.get('email'):
+            receivers.append(user.get('email'))
+
+    return receivers  
+  
+  def getSMSNumbers(self):  
+    numbers = []    
+    for user in self.getUsers():
+        if user.get('sms_alert') and user.get('phone_no'):
+            numbers.append(user.get('phone_no'))
+
+    return numbers

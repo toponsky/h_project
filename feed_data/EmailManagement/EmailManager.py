@@ -57,21 +57,30 @@ class EmailManager:
                 name = name,
                 color_section = colorSection
               )
-  def sendBag(self, bag):
+  def sendBag(self, receivers, bag):
     self._connect()
-    for to in self.config['to']:
+    for to in receivers:
       print("Email: send bag: '{0}' to {1}".format(bag.get('name'), to))
       msg = self._prepare_message(to, "Hermes : {0} is available now".format(bag.get('name')), {'html': self._prepare_content(bag)})
       self.smtp.send_message(msg) 
       print("Email sent successfully") 
+      
     self.smtp.quit()  
 
-  def sendRawData(self, url, imgUrl, name, colorSection):
+    return {
+              "comment": 'Bag: {0}, send to {1} receiver(s)'.format(bag.get('name'), len(receivers)),
+              "to": ', '.join(receivers)
+          }
+
+  def sendRawData(self, receivers,  url, imgUrl, name, colorSection):
     self._connect()
-    for to in self.config['to']:
+    for to in receivers:
       print("Email: send bag: '{0}' to {1}".format(name, to))
       msg = self._prepare_message(to, "Hermes : {0} is available now".format(name), {'html': self._prepare_raw_data_content(url, imgUrl, name, colorSection)})
       self.smtp.send_message(msg) 
       print("Email sent successfully")     
     self.smtp.quit()
-  
+    return {
+              "comment": 'Bag: {0}, send to {1} receiver(s)'.format(name, len(receivers)),
+              "to": ', '.join(receivers)
+          }
