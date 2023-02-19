@@ -6,7 +6,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "add-to-cart": {
+    "hermes_front_end": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -23,7 +23,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/add-to-cart",
+            "outputPath": "dist/hermes_front_end",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -75,10 +75,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "add-to-cart:build:production"
+              "browserTarget": "hermes_front_end:build:production"
             },
             "development": {
-              "browserTarget": "add-to-cart:build:development"
+              "browserTarget": "hermes_front_end:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -86,7 +86,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "add-to-cart:build"
+            "browserTarget": "hermes_front_end:build"
           }
         },
         "test": {
@@ -110,5 +110,5 @@
       }
     }
   },
-  "defaultProject": "add-to-cart"
+  "defaultProject": "hermes_front_end"
 }

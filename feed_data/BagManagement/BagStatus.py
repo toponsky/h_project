@@ -32,14 +32,17 @@ class BagStatus:
       "fail_no": len(failList),
       "comment": "Try second time, With '{0}'s fails".format(len(failList))
     })
+    s_index = 0
     # Try second fail check   
     for bag in failList:
-      self.updateBag(bag)
+      if self.updateBag(bag):
+        s_index =s_index + 1
+      
 
     if len(failList) == 0:
       msg = "COMPLETE list" 
     else: 
-      msg = "{0} number bags fail".format(len(failList))
+      msg = "{0} number bags fail".format(len(failList) - s_index)
 
     
     self.db.insertResponseLog({

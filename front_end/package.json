@@ -1,10 +1,11 @@
 {
-  "name": "add-to-cart",
+  "name": "hermes_frond_end",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
+    "build:prod": "ng build --prod",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },

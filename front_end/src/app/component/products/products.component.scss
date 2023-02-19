@@ -12,6 +12,7 @@
 
 .item img {
     width: 64px;
+    height: 64px;
 }
 
 .item {
@@ -26,6 +27,7 @@
 .card {
     padding: 20px;
     margin: 50px;
+   
 }
 
 .card a {
@@ -49,4 +51,10 @@
 
 .is_checking {
     background: green;
+}
+
+@media only screen and (max-width: 768px) {
+    .card {
+       margin:initial
+    }
 }
