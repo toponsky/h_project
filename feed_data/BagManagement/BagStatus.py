@@ -118,7 +118,7 @@ class BagStatus:
 
     print("")
     print("")
-    requestLog['render_time'] = (time.time() - start_time)
+    requestLog['render_time'] =int((time.time() - start_time))
     self.db.insertResponseLog(requestLog)
     return isSuccess
 

@@ -52,5 +52,5 @@ class BagInfo:
           err_msg = json.loads(response.text)['title']
           collectLog['err_msg'] = err_msg
 
-    collectLog['render_time'] = (time.time() - start_time)
+    collectLog['render_time'] = int((time.time() - start_time))
     self.db.insertCollectLog(collectLog)
