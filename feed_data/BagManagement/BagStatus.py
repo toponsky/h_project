@@ -47,7 +47,7 @@ class BagStatus:
     
     self.db.insertResponseLog({
       'check_no': amount,
-      "fail_no": len(failList),
+      "fail_no": len(failList) - s_index,
       "comment": "Finish Check Bags, With : '{0}' and took {1}s".format(msg, int(time.time() - start_time))
     })
 
