@@ -32,6 +32,7 @@
                 <div *ngIf="filterCondition == 'all'">
                     <p><strong>Checked:</strong> {{item.is_checking}}</p>
                 </div>
+                <p><strong>Added Time:</strong> {{item.create_time | date:'yyyy-MM-dd'}}</p>
                 <p><strong>Price:</strong> €{{item.p_price}}</p>
                 <div *ngIf="filterCondition == 'non-checked'">
                     <button class="btn btn-primary" (click)=checkingBag(item)>Checked Bag</button>
