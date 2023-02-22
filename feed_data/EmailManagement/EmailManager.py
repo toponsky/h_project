@@ -57,6 +57,17 @@ class EmailManager:
                 name = name,
                 color_section = colorSection
               )
+
+  def _prepare_new_bag_raw_data_content(self, url, imgUrl, name, colorSection):
+    with app.app_context(), app.test_request_context():
+      return render_template('new_bag.html',
+                url = url,
+                img_url = 'https:' + imgUrl,
+                name = name,
+                color_section = colorSection
+              )
+
+
   def sendBag(self, receivers, bag):
     self._connect()
     for to in receivers:
@@ -84,3 +95,15 @@ class EmailManager:
               "comment": 'Bag: {0}, send to {1} receiver(s)'.format(name, len(receivers)),
               "to": ', '.join(receivers)
           }
+  def sendNewBagRawData(self, receivers, url, imgUrl, name, colorSection):
+    self._connect()
+    for to in receivers:
+      print("Email: send bag: '{0}' to {1}".format(name, to))
+      msg = self._prepare_message(to, "Hermes : NEW BAG '{0}' is available now".format(name), {'html': self._prepare_new_bag_raw_data_content(url, imgUrl, name, colorSection)})
+      self.smtp.send_message(msg) 
+      print("Email sent successfully")     
+    self.smtp.quit()
+    return {
+              "comment": 'New Bag: {0}, send to {1} receiver(s)'.format(name, len(receivers)),
+              "to": ', '.join(receivers)
+          }        
