@@ -26,7 +26,7 @@
         <div>Bag Number: {{amount}}</div>
         <ng-container *ngFor="let item of filterList | filter:searchKey:'title'">
             <div class="card col-md-3" [ngStyle]="{backgroundColor: getCheckedBackground(item)}">
-                <a href="https://www.google.ie"><img src="{{item.img_url}}" alt=""></a>
+                <a href="https://www.hermes.com{{item.url}}"><img src="{{item.img_url}}" alt=""></a>
                 <h5 style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;max-width: 100ch;">{{item.name}}</h5>
                 <p style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;max-width: 100ch;">{{item.description}}</p>
                 <div *ngIf="filterCondition == 'all'">
