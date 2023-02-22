@@ -5,7 +5,7 @@ const bagInfo = mongoose.model('bag_info');
 
 exports.getAllBag = function(req, res) {
 
-  bagInfo.find({is_destroy: false}, function(err, bags) {
+  bagInfo.find({is_destroy: false}).sort({ create_time: 'desc' }).exec(function(err, bags) {
     if(err) 
       res.send(err)
     res.json(bags)
