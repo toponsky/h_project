@@ -6,5 +6,6 @@ from EmailManagement import EmailManager
 if __name__ == "__main__":
     
     db = Database.Database(config.db_connection)
-    bag_info = BagInfo.BagInfo(db, config.urls)
+    email = EmailManager.EmailManager(config.email_config)
+    bag_info = BagInfo.BagInfo(db, email, config.urls)
     bag_info.collectBagsInfo()

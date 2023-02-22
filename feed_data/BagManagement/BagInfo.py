@@ -4,15 +4,17 @@ from bs4 import BeautifulSoup as BS
 import config
 
 class BagInfo:
-  def __init__(self, db, urls):
+  def __init__(self, db, email, urls):
     self.db = db
     self.urls = urls
+    self.email = email
 
   def collectBagsInfo(self):
     for country in self.urls:
         self.soupify(self.urls[country])
 
   def soupify(self, url):
+    print("URL: {0}".format(url))
     start_time = time.time()
     collectLog = {}
     proxy = "http://458be2d6aa1638f2627cec41c06494e314ae0b40:js_render=true&antibot=true&premium_proxy=true&proxy_country=de@proxy.zenrows.com:8001"
@@ -41,6 +43,7 @@ class BagInfo:
             p_color = text[1].split(':')[1].replace('\xa0 ','').strip()
             p_price = text[2].replace('\xa0 ','').replace(' €\n', '')
             self.db.insertOneBag(p_id,p_url,p_img_url,p_name,p_color,p_price)
+            self.db.insertEmailLog(self.email.sendNewBagRawData(self.db.getEmailAddresses(), p_url, p_img_url, p_name, p_color)) 
             print('{0}.{1}'.format(i, b.text))
             add_index = add_index + 1
           i +=1     
