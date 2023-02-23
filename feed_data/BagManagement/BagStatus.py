@@ -70,7 +70,7 @@ class BagStatus:
       if isSuccess:
         soup = BS(response.text, 'html.parser')
 
-        colorSections = len(soup.find_all("h-product-variants"))
+        noBagMsg = len(soup.find_all("span", {"class": "message-info"}))
         blockerDiv = len(soup.find_all("div", {"id": "cmsg"}))
         
         
@@ -80,7 +80,7 @@ class BagStatus:
           self.db.updateBagStatus(b_id, isBlocked = True)
           isBlocked = True
 
-        elif colorSections == 0:
+        elif noBagMsg > 0:
           requestLog['bag_status'] = 'BAG NOT ENABLE'
           print('BAG NOT ENABLE')
           self.db.updateBagStatus(b_id, isAvailable = False)
@@ -88,7 +88,7 @@ class BagStatus:
         else:
           requestLog['bag_status'] = 'BAG ENABLE'
           print('BAG ENABLE ....')
-          self.db.updateBagStatus(b_id, colorSection = colorSections)
+          self.db.updateBagStatus(b_id)
           self.db.insertEmailLog(self.email.sendBag(self.db.getEmailAddresses(), bag)) 
           self.db.insertSMSLog(SMSManager.sendBagSMS(self.db.getSMSNumbers(), bag.get('name'))) 
       else:

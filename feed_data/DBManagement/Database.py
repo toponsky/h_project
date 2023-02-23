@@ -98,7 +98,7 @@ class Database:
   def getBagRequestList(self):
     condition = {
         "$and": [
-          {"is_destroy": {"$nin": ["null", "false"]}},
+          {"is_destroy": False},
           {'is_checking': True}
         ]
       } 
