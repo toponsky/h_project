@@ -61,7 +61,7 @@ class EmailManager:
   def _prepare_new_bag_raw_data_content(self, url, imgUrl, name, colorSection):
     with app.app_context(), app.test_request_context():
       return render_template('new_bag.html',
-                url = url,
+                url = config.BASE_URL + url,
                 img_url = 'https:' + imgUrl,
                 name = name,
                 color_section = colorSection
