@@ -9,27 +9,26 @@ from ProxyManagement import ProxyManager
 from EmailManagement import EmailManager
 from SMSManangement import SMSManager
 
-class BagStatus:
+class BagAvailableCheck:
   
-  def __init__(self, db, email_agent):
+  def __init__(self, db):
     self.db = db
-    self.email = email_agent
     requests.packages.urllib3.disable_warnings()
 
   def checkAvailable(self):
     requestLog = {}
     start_time = time.time()
     failList = []
-    amount, bags = self.db.getBagRequestList()
-    
-    self.db.insertResponseLog({
-      "comment": "Start Check Bags"
+    amount, bags = self.db.getAllBags()
+
+    self.db.insertAavaiableCheckLog({
+      "comment": "Start Bags Avaiable Check"
     })
     for bag in bags:
       if not self.updateBag(bag):
         failList.append(bag)
     
-    self.db.insertResponseLog({
+    self.db.insertAavaiableCheckLog({
       "fail_no": len(failList),
       "comment": "Try second time, With '{0}'s fails".format(len(failList))
     })
@@ -39,7 +38,6 @@ class BagStatus:
       if self.updateBag(bag):
         s_index =s_index + 1
       
-
     fail_no = len(failList) - s_index
     if fail_no == 0:
       msg = "COMPLETE list" 
@@ -47,10 +45,10 @@ class BagStatus:
       msg = "{0} number bags fail".format(fail_no)
 
     
-    self.db.insertResponseLog({
+    self.db.insertAavaiableCheckLog({
       'check_no': amount,
       "fail_no": len(failList) - s_index,
-      "comment": "Finish Check Bags, With : '{0}' and took {1}s".format(msg, int(time.time() - start_time))
+      "comment": "Finish Bags avaiable Check, With : '{0}' and took {1}s".format(msg, int(time.time() - start_time))
     })
 
 
@@ -71,37 +69,17 @@ class BagStatus:
       requestLog['response_status'] = isSuccess
       print("Get Response '{0}'".format(isSuccess))
       if isSuccess:
-        soup = BS(response.text, 'html.parser')
-
-        noBagMsg = len(soup.find_all("span", {"class": "message-info"}))
-        blockerDiv = len(soup.find_all("div", {"id": "cmsg"}))
-        
-        
-        if blockerDiv > 0:
-          print('BAG WEBSITE IS BLOCKED')
-          requestLog['bag_status'] = 'BAG WEBSITE IS BLOCKED'
-          self.db.updateBagStatus(b_id, isBlocked = True)
-          isBlocked = True
-
-        elif noBagMsg > 0:
-          requestLog['bag_status'] = 'BAG NOT ENABLE'
-          print('BAG NOT ENABLE')
-          self.db.updateBagStatus(b_id, isAvailable = False)
-
-        else:
-          requestLog['bag_status'] = 'BAG ENABLE'
-          print('BAG ENABLE ....')
-          self.db.updateBagStatus(b_id)
-          self.db.insertEmailLog(self.email.sendBag(self.db.getEmailAddresses(), bag)) 
-          self.db.insertSMSLog(SMSManager.sendBagSMS(self.db.getSMSNumbers(), bag.get('name'))) 
+        self.db.updateBagStatus(b_id, isAvailable=bag.get('is_available'), colorSection=bag.get('color_section')) 
+        print('Website for Bag: "{0}"  ----> is avaiable'.format(bag.get('name')))
+        requestLog['bag_website']= 'Available'
       else:
         requestLog['err_code'] = response.status_code 
         print('Fail code: {0}'.format(response.status_code))  
         if response.status_code == 404:
           self.db.updateBagStatus(b_id, isDestroy = True)
           isSuccess = True
-          requestLog['err_msg'] = 'bag website is destroyed'
-          print('bag website is destroyed')  
+          requestLog['bag_website'] = 'Not Available'
+          print('Website for Bag: "{0}" ----> is NOT avaiable'.format(bag.get('name')))
 
         elif response.status_code == 422:
           isSuccess = False  
@@ -122,7 +100,7 @@ class BagStatus:
     print("")
     print("")
     requestLog['render_time'] =int((time.time() - start_time))
-    self.db.insertResponseLog(requestLog)
+    self.db.insertAavaiableCheckLog(requestLog)
     return isSuccess
 
     

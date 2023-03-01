@@ -19,6 +19,7 @@ class Database:
     self.bag_collect_log = self.database.bag_collect_log
     self.sms_log = self.database.sms_log
     self.email_log = self.database.email_log
+    self.bag_avaiable_Log= self.database.bag_avaiable_Log
     self.user = self.database.user
     print("Database connected successfully")
     
@@ -42,14 +43,17 @@ class Database:
   def findOneBag(self, p_id):
     return self.bag_info.find_one({'id': p_id})  
 
-  def isBagExists(self, p_id):
-    if self.bag_info.count_documents({'id': p_id}) > 0:
+  def isBagExists(self, url):
+    if self.bag_info.count_documents({'url': url}) > 0:
       return True 
     else:
       return False
 
   def getBags(self):
     return self.bag_info.find({"is_destroy": {"$nin": ["null", "false"]}})
+
+  def getAllBags(self):
+    return self.bag_info.count_documents({}), self.bag_info.find({})  
 
   def updateBagStatus(self, id, isAvailable = True, isDestroy = False, colorSection = 0, isBlocked = False):
     if isBlocked:
@@ -90,6 +94,10 @@ class Database:
   def insertResponseLog(self, logData):
     logData['create_at'] = datetime.now()
     self.bag_request_log.insert_one(logData)  
+
+  def insertAavaiableCheckLog(self, logData):
+    logData['create_at'] = datetime.now()
+    self.bag_avaiable_Log.insert_one(logData)  
 
   def insertCollectLog(self, logData):
     logData['create_at'] = datetime.now()

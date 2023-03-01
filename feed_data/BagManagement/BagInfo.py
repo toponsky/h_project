@@ -35,9 +35,10 @@ class BagInfo:
           img  = b.find('img')
           text = b.text.split(',')
           
-          p_id = href.get('id')
-          if not self.db.isBagExists(p_id):
-            p_url = href.get('href')
+          
+          p_url = href.get('href')
+          if not self.db.isBagExists(p_url):
+            p_id = href.get('id')  
             p_img_url = img.get('src')
             p_name = text[0]
             p_color = text[1].split(':')[1].replace('\xa0 ','').strip()
