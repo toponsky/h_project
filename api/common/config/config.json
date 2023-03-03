@@ -19,6 +19,7 @@
       "secure": true,
       "auth": {
         "username": "toponsky@irishdata.ie",
+        "password": "c00114110!"
       },
       "tls": {
         "rejectUnauthorized": false
