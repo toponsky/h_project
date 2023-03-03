@@ -2,3 +2,4 @@
 tmp*
 *.pyc
 node_modules
+.angular

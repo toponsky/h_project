@@ -1,0 +1,58 @@
+<mat-card>
+  <mat-card-content>
+    <div *ngIf="(loading | async)" class="loader"></div>
+    <div class="title">Login</div>
+    <form [formGroup]="signInForm" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label for="email"></label>
+        <input type="text"
+                id="email"
+                class="form-control"
+                name="email"
+                placeholder="Email"
+                formControlName="email"
+                [maxlength]="240"
+        >
+        <span *ngIf="signInForm.get('email')?.invalid && signInForm.get('email')?.touched" class="alert-danger">
+                Please enter a valid email!
+              </span>
+      </div>
+
+      <div class="form-group">
+        <label for="password"></label>
+        <input type="password"
+                id="password"
+                class="form-control"
+                name="password"
+                placeholder="Password"
+                formControlName="password"
+                [maxlength]="240"
+        >
+        <span *ngIf="signInForm.get('password')?.invalid && signInForm.get('password')?.touched">
+                  <span *ngIf="signInForm.get('password')" class="alert-danger">This field is required!</span>
+                </span>
+      </div>
+
+
+      <div class="row">
+        <div class="col-md-6">
+          <div class="row pt-2">
+            <div class="col-md-12">
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12">
+              
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 responsive-btn">
+          <button class="btn btn-info w-75" type="submit"
+                  [disabled]="signInForm.invalid || signInForm.pending || (loading | async)">Login
+          </button>
+        </div>
+      </div>
+
+    </form>
+  </mat-card-content>
+</mat-card>

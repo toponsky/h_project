@@ -1,13 +1,28 @@
 {
   "default": {
+    "clientUrl": "http://localhost:4200",
     "port": 8383,
     "api_version": "/v1/",
+    "api_secured": "secured/",
+    "api_secret_key": "very_secret_is_it",
+    "salt_rounds": 10,
     "db_connection": {
       "db_host": "192.168.178.20",
       "db_port": "27017",
       "db_name": "hermes_db",
       "username": "yl_root",
       "password": "Cc00114110!"
+    },
+    "email_config": {
+      "host": "192.168.178.20",
+      "port": "465",
+      "secure": true,
+      "auth": {
+        "username": "toponsky@irishdata.ie",
+      },
+      "tls": {
+        "rejectUnauthorized": false
+      }
     }
   }
 }

@@ -22,6 +22,7 @@ module.exports.start = (callback) => {
     console.log("MongoDB successfully connected");
     console.log("Start Application");
     require('./model/bagInfo')
+    require('./model/user')
     if(callback) {
       callback()
     }

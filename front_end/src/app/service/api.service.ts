@@ -6,18 +6,18 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root'
 })
 export class ApiService {
-  baseUrl = environment.baseUrl;
+  baseUrl = environment.baseUrl + environment.api_version + environment.api_secured;
   constructor(private http : HttpClient) { }
   
   getProduct(){
-    return this.http.get<any>(this.baseUrl + "/v1/get_all_bag")
+    return this.http.get<any>(this.baseUrl + "/get_all_bag")
     .pipe(map((res:any)=>{
       return res;
     }))
   }
 
   checkProduct(bag: any, isChecking: any ) {
-    return this.http.post<any>(this.baseUrl + "/v1/checked_bag", {'id': bag.id, 'is_checking': isChecking})
+    return this.http.post<any>(this.baseUrl + "/checked_bag", {'id': bag.id, 'is_checking': isChecking})
     .pipe(map((res:any)=>{
       return res;
     }))

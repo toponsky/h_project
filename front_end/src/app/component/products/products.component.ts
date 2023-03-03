@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from 'src/app/service/api.service';
 import { __read } from 'tslib';
+import * as fromApp from '../../store/app.reducers';
+import * as AuthActions from "../../store/auth/auth.actions";
+import {Store} from '@ngrx/store';
 
 @Component({
   selector: 'app-products',
@@ -15,9 +18,10 @@ export class ProductsComponent implements OnInit {
   public filterValue: any;
   public amount : any;
   searchKey:string ="";
-  constructor(private api : ApiService) { }
+  constructor(private store: Store<fromApp.AppState>, private api : ApiService) { }
 
   ngOnInit(): void {
+    this.store.dispatch(new AuthActions.CheckIfLoggedIn());
     this.api.getProduct()
     .subscribe(res=>{
       this.productList = res;

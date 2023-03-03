@@ -4,7 +4,9 @@
 
 export const environment = {
   production: false,
-  baseUrl:"http://192.168.178.70:8383"
+  baseUrl:"http://localhost:8383",
+  api_version: "/v1",
+  api_secured: "/secured"
 };
 
 /*

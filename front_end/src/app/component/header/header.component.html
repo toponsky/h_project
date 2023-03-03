@@ -6,5 +6,8 @@
             </i>
             <strong style="font-size: 30px;">HBCM</strong>
         </div>
+        <div *ngIf="(authState | async)?.authenticated">
+            <button mat-button (click)="logout()">Logout</button>
+        </div>
     </div>
 </header>
