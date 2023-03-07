@@ -4,6 +4,8 @@ requests.packages.urllib3.disable_warnings()
 
 BASE_URL='https://www.hermes.com'
 
+LOG_PURCHASE = "/home/pi/log/purchase.log"
+
 urls = {
   'German': 'https://www.hermes.com/de/de/category/damen/taschen-und-kleinlederwaren/taschen-und-kleine-taschen/',
   # 'IE': 'https://www.hermes.com/ie/en/category/women/bags-and-small-leather-goods/bags-and-clutches'

@@ -8,6 +8,7 @@ import json
 from ProxyManagement import ProxyManager
 from EmailManagement import EmailManager
 from SMSManangement import SMSManager
+from Purchase import Purchase as p
 
 class BagStatus:
   
@@ -15,6 +16,7 @@ class BagStatus:
     self.db = db
     self.email = email_agent
     requests.packages.urllib3.disable_warnings()
+    
 
   def checkAvailable(self):
     requestLog = {}
@@ -94,6 +96,8 @@ class BagStatus:
           self.db.updateBagStatus(b_id)
           self.db.insertEmailLog(self.email.sendBag(self.db.getEmailAddresses(), bag)) 
           self.db.insertSMSLog(SMSManager.sendBagSMS(self.db.getSMSNumbers(), bag.get('name'))) 
+          print('Start Buying Process Via Purchase Server ....')
+          p.buy(url)
       else:
         requestLog['err_code'] = response.status_code 
         print('Fail code: {0}'.format(response.status_code))  
