@@ -41,7 +41,7 @@ class ChromePurchase:
     ctr.scroll(-200)
     time.sleep(2)
 
-   position = utils.findAndClick(self.image_path + 'confirm_2_delivery_button.png', isDoubleClick = True)
+    position = utils.findAndClick(self.image_path + 'confirm_2_delivery_button.png', isDoubleClick = True)
     if position is None:
       position = utils.findAndClick(self.image_path + 'confirm_1_a_user_name_fields_button.png')
       time.sleep(3)
@@ -51,7 +51,7 @@ class ChromePurchase:
 
     ctr.scroll(-500)
     time.sleep(1)
-    
+
     utils.findAndClick(self.image_path + 'confirm_3_card_code.png', isDoubleClick = True)
     keyboard.write("283")
     utils.keepForceOnBrowser()
