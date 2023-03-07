@@ -14,12 +14,11 @@ class ChromePurchase:
     self.image_path = ROOT_DIR + '/images/chrome/'
 
   def addToShoppingCard(self, url):
-    
     print("START - Buying process")
     print(datetime.now().strftime("%Y/%m/%d %H:%M:%S"))
     print(f'url: {url}')
     self.browser.open(url)
-
+    ctr.moveTo(10,110, duration =2)
     utils.findAndClick(self.image_path + 'user_icon.png', isDoubleClick = True)
 
     position = utils.findAndClick(self.image_path + 'login_button.png', y_adj = -20, isDoubleClick = True)
@@ -42,13 +41,17 @@ class ChromePurchase:
     ctr.scroll(-200)
     time.sleep(2)
 
-    utils.findAndClick(self.image_path + 'confirm_2_delivery_button.png', isDoubleClick = True)
-
+   position = utils.findAndClick(self.image_path + 'confirm_2_delivery_button.png', isDoubleClick = True)
+    if position is None:
+      position = utils.findAndClick(self.image_path + 'confirm_1_a_user_name_fields_button.png')
+      time.sleep(3)
+      position = utils.findAndClick(self.image_path + 'confirm_1_a_user_name_fields_button.png')
+      time.sleep(3)
+      position = utils.findAndClick(self.image_path + 'confirm_2_delivery_button.png', isDoubleClick = True)
 
     ctr.scroll(-500)
     time.sleep(1)
-
-
+    
     utils.findAndClick(self.image_path + 'confirm_3_card_code.png', isDoubleClick = True)
     keyboard.write("283")
     utils.keepForceOnBrowser()
