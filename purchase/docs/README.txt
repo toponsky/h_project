@@ -1,2 +1,5 @@
 sample command:
-python3 purchase.py https://www.hermes.com/de/de/product/tasche-steeple-25-H083618CKAC/
+
+python3 task_dev.py
+
+python -u server.py >> /Users/limin/Documents/yspace/log/purchase_server.log
