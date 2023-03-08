@@ -9,8 +9,8 @@ def purchase_event():
 	url = request.form.get('url')
 	if url is not None:
 		sPurchase = cPurchase.ChromePurchase()
-		sPurchase.addToShoppingCard(url)
-		return Response("success")
+		msg = sPurchase.addToShoppingCard(url)
+		return Response(msg)
 	else:
 		return "Not purchase URL", 400	
 

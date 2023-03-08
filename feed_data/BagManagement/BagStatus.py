@@ -57,6 +57,7 @@ class BagStatus:
 
 
   def updateBag(self, bag):
+    purchase_server_check = 'available'
     start_time = time.time()
     requestLog = {}
     url = config.BASE_URL + bag.get('url')
@@ -91,13 +92,19 @@ class BagStatus:
           self.db.updateBagStatus(b_id, isAvailable = False)
 
         else:
-          requestLog['bag_status'] = 'BAG ENABLE'
-          print('BAG ENABLE ....')
-          self.db.updateBagStatus(b_id)
-          self.db.insertEmailLog(self.email.sendBag(self.db.getEmailAddresses(), bag)) 
-          self.db.insertSMSLog(SMSManager.sendBagSMS(self.db.getSMSNumbers(), bag.get('name'))) 
-          print('Start Buying Process Via Purchase Server ....')
-          p.buy(url)
+          try:
+            purchase_server_check = p.buy(url)
+          except:
+            print('Purchase server is not available')
+          
+          if purchase_server_check == 'available'
+            requestLog['bag_status'] = 'BAG ENABLE'
+            print('BAG ENABLE ....')
+            self.db.updateBagStatus(b_id)
+            self.db.insertEmailLog(self.email.sendBag(self.db.getEmailAddresses(), bag)) 
+            self.db.insertSMSLog(SMSManager.sendBagSMS(self.db.getSMSNumbers(), bag.get('name'))) 
+          else: 
+            print("BAG CHECKED WITH PURCHASE SERVER AND NOT ENABLE")
       else:
         requestLog['err_code'] = response.status_code 
         print('Fail code: {0}'.format(response.status_code))  
