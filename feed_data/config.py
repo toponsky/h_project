@@ -35,3 +35,5 @@ email_config = {
     "yimingliu0216@gmail.com"
   ]
 }
+
+purchase_server = "http://192.168.178.49:5001"

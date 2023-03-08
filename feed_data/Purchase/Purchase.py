@@ -1,7 +1,8 @@
 import requests
+import config
 
 def buy(url):
-  r = requests.post("http://192.168.178.68:5000/purchase", 
+  r = requests.post(config.purchase_server + "/purchase", 
     data={
       'url': url
     })
