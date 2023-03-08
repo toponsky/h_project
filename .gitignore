@@ -3,3 +3,4 @@ tmp*
 *.pyc
 node_modules
 .angular
+.DS_Store
