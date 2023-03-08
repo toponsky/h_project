@@ -93,11 +93,13 @@ class BagStatus:
 
         else:
           try:
+            print("Start Buying Process Via Purchase Server: " + config.purchase_server)
             purchase_server_check = p.buy(url)
           except:
             print('Purchase server is not available')
           
-          if purchase_server_check == 'available'
+          print("Purchase server checked result: " + purchase_server_check)
+          if purchase_server_check == 'available':
             requestLog['bag_status'] = 'BAG ENABLE'
             print('BAG ENABLE ....')
             self.db.updateBagStatus(b_id)
